@@ -27,7 +27,7 @@ class DiffingCell:
 # Should return a DiffingCell which we will place at (i,j) for you.
 def fill_cell(table, i, j, s, t, cost):
     # TODO: YOUR CODE HERE
-    if i != 0 or j != 0:
+    if i != 0 and j != 0: #Code for when cell is not along an edge
     	# there is 3 possible choices for each cell in this case. We will get the min cost one
     	# s,t should add the diagonal cell    	
     	# s,- should add the side cell
