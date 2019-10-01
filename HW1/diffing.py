@@ -59,15 +59,16 @@ def fill_cell(table, i, j, s, t, cost):
     		cost_i = cost("-",t[j-1]) + table.get(0,j-1).cost
     		return DiffingCell("-",t[j-1],cost_i)
 
-    
-
-    return DiffingCell('a', 'a' , 0)
-
 # Input: n and m, represents the sizes of s and t respectively.
 # Should return a list of (i,j) tuples, in the order you would like fill_cell to be called
 def cell_ordering(n,m):
     # TODO: YOUR CODE HERE
-    return []
+    cells_list= []
+    for i in range(n+1):
+    	for j in range(m+1):
+    		cells_list.append((i,j))
+    
+    return cells_list
 
 # Returns a size-3 tuple (cost, align_s, align_t).
 # cost is an integer cost.
