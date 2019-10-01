@@ -27,37 +27,36 @@ class DiffingCell:
 # Should return a DiffingCell which we will place at (i,j) for you.
 def fill_cell(table, i, j, s, t, cost):
     # TODO: YOUR CODE HERE
-    if i != 0 or j != 0:
-    	# there is 3 possible choices for each cell in this case. We will get the min cost one
-    	# s,t should add the diagonal cell    	
-    	# s,- should add the side cell
-    	# -,t should add the top cell
 
-    	choices = { cost(s[i-1],t[j-1]) + table.get(i-1,j-1).cost: [s[i-1], t[j-1]],
-    				cost(s[i-1],"-") + table.get(i-1, j).cost: [s[i-1], "-"],
-    				cost("-",t[j-1]) + table.get(i, j-1).cost: ["-",t[j-1]]
-    	}
+    # this is left top corner in the table
+    if i == 0 and j == 0:
+    	return DiffingCell(" "," ",0)
 
-    	min_cost = min(choices.keys())
-    	return DiffingCell(choices[min_cost][0], choices[min_cost][1], min_cost)
+    # j should be same in x axis of the table
+    if j == 0:
+    	# it is own cost + check the left cell to calculate the total cost
+    	cost_j = cost(s[i-1],"-") + table.get(i-1,0).cost
+    	return DiffingCell(s[i-1],"-",cost_j)
 
+    # i should be same in y axis of the table
+    if i == 0:
+    	# it is own cost + check the upper cell to calculate the total cost
+    	cost_i = cost("-",t[j-1]) + table.get(0,j-1).cost
+    	return DiffingCell("-",t[j-1],cost_i)
 
+    # there is 3 possible choices for each cell in this case. We will get the min cost one
+    # s,t should add the diagonal cell    	
+    # s,- should add the side cell
+    # -,t should add the top cell
     else:
-    	# this is left top corner in the table
-    	if i == 0 and j == 0:
-    		return DiffingCell("","",0)
 
-    	# j should be same in x axis of the table
-    	if j == 0:
-    		# it is own cost + check the left cell to calculate the total cost
-    		cost_j = cost(s[i-1],"-") + table.get(i-1,0).cost
-    		return DiffingCell(s[i-1],"-",cost_j)
+	    choices = { cost(s[i-1],t[j-1]) + table.get(i-1,j-1).cost: [s[i-1], t[j-1]],
+	    			cost(s[i-1],"-") + table.get(i-1, j).cost: [s[i-1], "-"],
+	    			cost("-",t[j-1]) + table.get(i, j-1).cost: ["-",t[j-1]]
+	    }
 
-    	# i should be same in y axis of the table
-    	if i == 0:
-    		# it is own cost + check the upper cell to calculate the total cost
-    		cost_i = cost("-",t[j-1]) + table.get(0,j-1).cost
-    		return DiffingCell("-",t[j-1],cost_i)
+	    min_cost = min(choices.keys())
+	    return DiffingCell(choices[min_cost][0], choices[min_cost][1], min_cost)
 
 # Input: n and m, represents the sizes of s and t respectively.
 # Should return a list of (i,j) tuples, in the order you would like fill_cell to be called
@@ -76,7 +75,35 @@ def cell_ordering(n,m):
 # See instructions.pdf for more information on align_s and align_t.
 def diff_from_table(s, t, table):
     # TODO: YOUR CODE HERE
-    return (0, "", "")
+    # cost in bottom right corner will give us the lowest cost
+    corner_cell = table.get(len(s),len(t))
+    final_cost = corner_cell.cost
+
+    i, j = len(s), len(t)
+    align_s, align_t = corner_cell.s_char, corner_cell.t_char
+
+    while (i != 0 and j != 0) and (i >= 0) and (j >= 0):
+    	first_char = table.get(i,j).s_char
+    	second_char = table.get(i,j).t_char
+
+    	# backtrace by going up
+    	if (first_char == "-" and second_char != "-"):
+    		j = j - 1
+    		
+    	# backtrace by going left
+    	if (first_char != "-" and second_char == "-"):
+    		i = i - 1
+
+    	# backtrace diagonal
+    	else:
+    		i = i - 1
+    		j = j - 1
+
+    	current_cell = table.get(i, j)
+        align_s = align_s + current_cell.s_char
+        align_t = align_t + current_cell.t_char 
+
+    return (final_cost, align_s[::-1], align_t[::-1])
 
 # Example usage
 if __name__ == "__main__":
