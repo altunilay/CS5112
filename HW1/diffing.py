@@ -27,6 +27,27 @@ class DiffingCell:
 # Should return a DiffingCell which we will place at (i,j) for you.
 def fill_cell(table, i, j, s, t, cost):
     # TODO: YOUR CODE HERE
+    if i != 0 or j != 0:
+
+    else:
+    	# this is left top corner in the table
+    	if i == 0 and j == 0:
+    		return DiffingCell("","",0)
+
+    	# j should be same in x axis of the table
+    	if j == 0:
+    		# it is own cost + check the left cell to calculate the total cost
+    		cost_j = cost(s[i-1],"-") + table.get(i-1,0).cost
+    		return DiffingCell(s[i-1],"-",cost_j)
+
+    	# i should be same in y axis of the table
+    	if i == 0:
+    		# it is own cost + check the upper cell to calculate the total cost
+    		cost_i = cost("-",t[j-1]) + table.get(0,j-1).cost
+    		return DiffingCell("-",t[j-1],cost_i)
+
+    
+
     return DiffingCell('a', 'a' , 0)
 
 # Input: n and m, represents the sizes of s and t respectively.
