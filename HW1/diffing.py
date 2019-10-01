@@ -28,6 +28,19 @@ class DiffingCell:
 def fill_cell(table, i, j, s, t, cost):
     # TODO: YOUR CODE HERE
     if i != 0 or j != 0:
+    	# there is 3 possible choices for each cell in this case. We will get the min cost one
+    	# s,t should add the diagonal cell    	
+    	# s,- should add the side cell
+    	# -,t should add the top cell
+
+    	choices = { cost(s[i-1],t[j-1]) + table.get(i-1,j-1).cost: [s[i-1], t[j-1]],
+    				cost(s[i-1],"-") + table.get(i-1, j).cost: [s[i-1], "-"],
+    				cost("-",t[j-1]) + table.get(i, j-1).cost: ["-",t[j-1]]
+    	}
+
+    	min_cost = min(choices.keys())
+    	return DiffingCell(choices[min_cost][0], choices[min_cost][1], min_cost)
+
 
     else:
     	# this is left top corner in the table
