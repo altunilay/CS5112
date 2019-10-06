@@ -39,6 +39,8 @@ def fill_cell(T, i, j, string, is_word):
         pastWord = False
         for x in range(len(string)+1):
             #If x>i-1, we haven't filled the cell (and won't). Skip it!
+            #(Could get rid of this part by changing cell_ordering so it
+            #has our program fill columns at a time instead, but works either way)
             if x > i-1:
                 break
             elif(T.get(x,i-1).value):
