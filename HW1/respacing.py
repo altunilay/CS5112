@@ -21,15 +21,47 @@ class RespaceTableCell:
 # Returns a RespaceTableCell to put at position (i,j)
 def fill_cell(T, i, j, string, is_word):
     #TODO: YOUR CODE HERE
-    return RespaceTableCell(False, None)
+    #Skip cell if row > column by returning default cell
+    if i > j:
+        return RespaceTableCell(False, None)
+
+    #Check if substring is a word
+    wordCheck = is_word(string[i:j+1])
+
+    #The substring was a word and could be the first word
+    if wordCheck and (i == 0):
+        return RespaceTableCell(True, 0)
+
+    #Substring is a word, but not the first one
+    #Requires more processing
+    elif wordCheck and (i > 0):
+        #Step back through column of table to see if there's a word before this
+        pastWord = False
+        for x in range(len(string)+1):
+            #If x>i-1, we haven't filled the cell (and won't). Skip it!
+            if x > i-1:
+                break
+            elif(T.get(x,i-1).value):
+                pastWord = True
+                
+        #If there was, we store that
+        if pastWord:
+            return RespaceTableCell(True, i)
+        #Otherwise, we couldn't use this word in the solution. Set false
+        else:
+            return RespaceTableCell(False, i)
+
+    #The substring was not a word. Do nothing
+    else:
+        return RespaceTableCell(False, None)
                   
 # Inputs: N, the size of the list being respaced
 # Outputs: a list of (i,j) tuples indicating the order in which the table should be filled.
 def cell_ordering(N):
     cells_list= []
-    for i in range(n+1):
-    	for j in range(m+1):
-    		cells_list.append((i,j))
+    for i in range(N+1):
+        for j in range(N+1):
+            cells_list.append((i,j))
     
     return cells_list
 
@@ -43,7 +75,7 @@ def respace_from_table(s, table):
 if __name__ == "__main__":
     # Example usage.
     from dynamic_programming import DynamicProgramTable
-    s = "itwasthebestoftimes"
+    s = "itwasthebestoftimes" #0,2,5,8,12,14
     wordlist = ["of", "it", "the", "best", "times", "was"]
     D = DynamicProgramTable(len(s) + 1, len(s) + 1, cell_ordering(len(s)), fill_cell)
     D.fill(string=s, is_word=lambda w:w in wordlist)
