@@ -90,7 +90,7 @@ def diff_from_table(s, t, table):
     		j = j - 1
     		
     	# backtrace by going left
-    	if (first_char != "-" and second_char == "-"):
+    	elif (first_char != "-" and second_char == "-"):
     		i = i - 1
 
     	# backtrace diagonal
