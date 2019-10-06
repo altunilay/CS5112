@@ -26,8 +26,12 @@ def fill_cell(T, i, j, string, is_word):
 # Inputs: N, the size of the list being respaced
 # Outputs: a list of (i,j) tuples indicating the order in which the table should be filled.
 def cell_ordering(N):
-    #TODO: YOUR CODE HERE
-    return []
+    cells_list= []
+    for i in range(n+1):
+    	for j in range(m+1):
+    		cells_list.append((i,j))
+    
+    return cells_list
 
 # Input: a filled dynamic programming table.
 # (See instructions.pdf for more on the dynamic programming skeleton)

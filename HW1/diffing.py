@@ -29,7 +29,7 @@ def fill_cell(table, i, j, s, t, cost):
     # TODO: YOUR CODE HERE
     # this is left top corner in the table
     if i == 0 and j == 0:
-    	return DiffingCell(" "," ",0)
+    	return DiffingCell("-","-",0)
 
     # j should be same in x axis of the table
     if j == 0:
@@ -76,19 +76,20 @@ def diff_from_table(s, t, table):
     # TODO: YOUR CODE HERE
     # cost in bottom right corner will give us the lowest cost
     corner_cell = table.get(len(s),len(t))
+
     final_cost = corner_cell.cost
 
     i, j = len(s), len(t)
     align_s, align_t = corner_cell.s_char, corner_cell.t_char
 
-    while (i != 0 and j != 0) and (i >= 0) and (j >= 0):
+    while not(i == 0 and j == 0):
     	first_char = table.get(i,j).s_char
     	second_char = table.get(i,j).t_char
 
     	# backtrace by going up
     	if (first_char == "-" and second_char != "-"):
     		j = j - 1
-    		
+
     	# backtrace by going left
     	elif (first_char != "-" and second_char == "-"):
     		i = i - 1
@@ -99,8 +100,11 @@ def diff_from_table(s, t, table):
     		j = j - 1
 
     	current_cell = table.get(i, j)
-        align_s = align_s + current_cell.s_char
-        align_t = align_t + current_cell.t_char 
+    	if not (current_cell.s_char == "-" and current_cell.t_char == "-"):
+	        align_s = align_s + current_cell.s_char
+	        align_t = align_t + current_cell.t_char 
+
+
 
     return (final_cost, align_s[::-1], align_t[::-1])
 
