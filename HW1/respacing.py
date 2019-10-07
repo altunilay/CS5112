@@ -72,8 +72,13 @@ def cell_ordering(N):
 # Return the respaced string, or None if there is no respacing.
 def respace_from_table(s, table):
     #TODO: YOUR CODE HERE
+    # check last column to see we were able to find all the words in the sentence otherwise return false
+    fully_spaceable = False
+
     indexes = []
     for i in table._table:
+        if i[len(s)-1].value:
+                fully_spaceable = True
         for j in i:
             if j.value:
                 indexes.append(j.index)
@@ -81,12 +86,11 @@ def respace_from_table(s, table):
     while 0 in indexes: indexes.remove(0)
     indexes = list(dict.fromkeys(indexes))
     
-    if not indexes: return None
+    if not indexes or not fully_spaceable: return None
     indexes.sort()
     for i, index in enumerate(indexes):
         index += i
         s = s[:index] + " " + s[index:]
-    print indexes
     return s
 
 if __name__ == "__main__":
