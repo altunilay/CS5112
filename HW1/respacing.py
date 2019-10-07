@@ -22,7 +22,7 @@ class RespaceTableCell:
 def fill_cell(T, i, j, string, is_word):
     #TODO: YOUR CODE HERE
     #Skip cell if row > column by returning default cell
-    if i > j:
+    if i > j or j == len(string) or i == len(string):
         return RespaceTableCell(False, None)
 
     #Check if substring is a word
