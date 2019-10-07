@@ -72,7 +72,18 @@ def cell_ordering(N):
 # Return the respaced string, or None if there is no respacing.
 def respace_from_table(s, table):
     #TODO: YOUR CODE HERE
-    return None
+    indexes = []
+    for i in table._table:
+        for j in i:
+            if j.value:
+                indexes.append(j.index)
+
+    indexes.sort()
+    for i, index in enumerate(indexes):
+        index += i
+        s = s[:index] + " " + s[index:]
+    print indexes
+    return indexes and s
 
 if __name__ == "__main__":
     # Example usage.
