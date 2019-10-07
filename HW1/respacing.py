@@ -80,13 +80,14 @@ def respace_from_table(s, table):
 
     while 0 in indexes: indexes.remove(0)
     indexes = list(dict.fromkeys(indexes))
-            
+    
+    if not indexes: return None
     indexes.sort()
     for i, index in enumerate(indexes):
         index += i
         s = s[:index] + " " + s[index:]
     print indexes
-    return indexes and s
+    return s
 
 if __name__ == "__main__":
     # Example usage.
