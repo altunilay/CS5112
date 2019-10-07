@@ -78,7 +78,8 @@ def respace_from_table(s, table):
             if j.value:
                 indexes.append(j.index)
 
-    if 0 in indexes: indexes.remove(0)
+    while 0 in indexes: indexes.remove(0)
+    indexes = list(dict.fromkeys(indexes))
             
     indexes.sort()
     for i, index in enumerate(indexes):
