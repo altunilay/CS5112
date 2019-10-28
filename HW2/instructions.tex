@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{multirow}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=blue,
+}
+
+\usepackage[margin = 1.2in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{color}
+
+\titleformat*{\section}{\large\bfseries}
+\setlength\parindent{0pt}
+
+\pagestyle{fancy}
+
+\fancyhead[L]{CS 5112 \quad  Algorithms and Data Structures for Applications}
+\fancyhead[R]{v 0.1}
+
+
+\title{\vspace{-2 em}Homework 2}
+\date{}
+\author{Due 11:59 PM on Monday November 4, 2019}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+	
+	In this assignment, you will implement Dijkstra's Shortest-Path Algorithm.
+	
+    \textbf{Key instructions:}
+    \begin{itemize}
+ 
+        \item 1. Collaboration: You are \textbf{required} to work in groups of 2 students on each assignment. Please indicate the name of your collaborator at the top of each assignment(in comments for each piece of code you submit) and cite any references you used (including articles, books, code, websites, and personal communications). If you're not sure whether to cite a source, err on the side of caution and cite it. You may submit just one copy of the solution for the group. Remember not to plagiarize: all solutions must be written by members of the group. 
+         \item 2. Partner-finding: You have one week to find your preferred partner yourself and form your own group on CMS. If you have not formed a group on CMS by the \textbf{partner-finding deadline on 10.28th 11:59PM}, we will run a partner-matching script to assign groups for you.
+        \item 3. Please only use \textbf{python2} for the assignment (allowing multiple versions makes grading substantially harder for a huge class like 5112)
+        \item 4. Please do NOT use any additional imports, only write your code where you see \texttt{TODO: YOUR CODE HERE}, and change your return value accordingly. 
+        \item 5. Please modify and submit the following files:
+   \begin{itemize}
+        \item \verb|graph_adjacency_list.py|
+        \item \verb|graph_edge_list.py|
+        \item \verb|shortest_path.py|
+    \end{itemize}
+        \item 6. Reminder on Late Policy: Each student has a total of one slip day that may be used without penalty for homework. We will also drop your lowest homework score. An assignment can be at most one day late without penalty via slip days.
+
+    \end{itemize}
+
+	\section{Graph Shortest Path}
+	\subsection{Data Structure}
+
+   We want to implement Dijkstra's Algorithm as presented in lecture to find the shortest path in a graph. Before doing so, you'll first need to implement a directed graph in two different ways:
+   \begin{itemize}
+       \item An \textbf{adjacency list}, where a graph is represented as a map, where the keys are nodes in the graph and the values are a list of all the nodes adjacent to the key node.
+       \item An \textbf{edge list}, where a graph is represented as a list of tuples, where each tuple represents an edge between two nodes.
+       
+   \end{itemize}
+   
+   NOTE: that for both these graphs, implementations for both the constructor and a \verb|has_edge| method are given. \textbf{Please DO NOT edit those given implementations}; they are there to help you understand the data structure we intend for you to implement.
+   
+   NOTE: The two graphs should be \textbf{*directed*} graphs
+   
+   \paragraph{Todos}
+   \begin{itemize}
+        \item {implement \textbf{add\_edge} in both \verb|graph_adjacency_list.py| and \verb|graph_edge_list.py|}
+        \item {implement \textbf{get\_neighbors} in both \verb|graph_adjacency_list.py| and \verb|graph_edge_list.py|}
+
+   \end{itemize}
+   
+   \subsection{Dijkstra's Shortest-Path Algorithm}
+   Next, you'll implement Dijkstra's Shortest-Path Algorithm, which should work regardless of which of the two types of graphs is given as input. The \verb|shortest_path| function asks you to return a tuple that looks like \verb|([`start_node`, ..., `target_node`], `length`)| where the first part is the shortest path from the \verb|`source_node`| to the \verb|`target_node`| and the second part is the \verb|`length`| of said path. However, you will implement this in two stages:
+   \begin{itemize}
+       \item First, implement \verb|shortest_path| while only worrying about the length of the path. For this stage, just return something like \verb|([], `length`) | so that the output passes our automated tester's type checks but allows you to focus on making the \verb|`length`| right.
+       \item Second, augment your implementation to track the nodes in the shortest path so that you can output the path itself along with its length.
+   \end{itemize}
+   
+   Each element of the output will be graded separately, so giving an output of \verb|([], `length`)| on a given input will receive partial credit (assuming `length` is correct for the given input).
+   
+   NOTE: You can assume the input graph is connected, that all the graph's edges have positive edge weights, that the \verb|source_node| and \verb|target_node| are both nodes in the graph, and that at least one path from the \verb|source_node| to the \verb|target_node| exists.
+   
+\paragraph{Todos}
+   \begin{itemize}
+        \item implement \textbf{shortest\_path} in  \verb|shortest_path.py|
+    \end{itemize}
+   
+   \section{Logistics}
+   To ensure compatibility with our grading software, please ensure that the provided test files run. You should be able to run the following without errors:
+   \begin{itemize}
+        \item \verb|python graph_test.py|
+        \item \verb|python shortest_path_test.py|
+    \end{itemize}
+
+   NOTE: \verb|shortest_path_test| relies on your graphs working, so ensure that \verb|graph_test| passes before moving on to \verb|shortest_path_test|.
+   
+   Just like HW1,  these tests are \textbf{non-exhaustive} meaning \textit{passing these tests alone does not necessarily guarantee a perfect score}.
+   
+	\section{Testing}
+	In addition to the provided tests, we encourage you to write additional ones because in real-life software development, you will eventually have to learn to write tests like this yourself and I recommend reading up on \href{https://cornelltech.github.io/CS5112-F18/Lectures/clinic_readability.pdf}{Richard's slides from last year} if you want to know more.
+	
+	
+\end{document}
