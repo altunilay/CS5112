@@ -1,5 +1,5 @@
-# TODO: Your name, Cornell NetID
-# TODO: Your Partner's name, Cornell NetID
+# TODO: Nilay Altun, na523
+# TODO: Kelly Mayhew, khm53
 
 # Please see instructions.txt for the description of this problem.
 from exceptions import NotImplementedError
@@ -16,7 +16,12 @@ class Graph:
     # Adds a directed edge from `node1` to `node2` to the graph with weight defined by `weight`.
     
     # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code
-    raise NotImplementedError
+    edge = (node2, weight)
+
+    if node1 in self.graph:
+    	self.graph[node1].append(edge)
+    if node1 not in self.graph:
+    	self.graph[node1] = [edge]
 
   def has_edge(self, node1, node2):
     # Returns whether the graph contains an edge from `node1` to `node2`.
@@ -31,4 +36,4 @@ class Graph:
     # to `x`.
 
     # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code
-    raise NotImplementedError
+    return self.graph[node]
