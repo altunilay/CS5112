@@ -16,8 +16,9 @@ class Graph:
     # Adds a directed edge from `node1` to `node2` to the graph with weight
     # defined by `weight`.
 
-    # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code    
-    raise NotImplementedError
+    # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code 
+    edge = (node1, node2, weight)
+    self.graph.append(edge)   
 
   def has_edge(self, node1, node2):
     # Returns whether the graph contains an edge from `node1` to `node2`.
@@ -30,4 +31,10 @@ class Graph:
     # to `x`.
 
     # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code
-    raise NotImplementedError
+    list_of_neighbors = []
+    
+    for (x,y,z) in self.graph:
+    	if x == node:
+    		list_of_neighbors.append((y, z))
+
+    return list_of_neighbors
