@@ -1,5 +1,5 @@
-# TODO: Your name, Cornell NetID
-# TODO: Your Partner's name, Cornell NetID
+# TODO: Nilay Altun, na523
+# TODO: Kelly Mayhew, khm53
 
 # Please see instructions.txt for the description of this problem.
 from exceptions import NotImplementedError
