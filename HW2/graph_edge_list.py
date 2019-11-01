@@ -17,8 +17,9 @@ class Graph:
     # defined by `weight`.
 
     # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code 
-    edge = (node1, node2, weight)
-    self.graph.append(edge)   
+    if not self.has_edge(node1, node2):
+        edge = (node1, node2, weight)
+        self.graph.append(edge)   
 
   def has_edge(self, node1, node2):
     # Returns whether the graph contains an edge from `node1` to `node2`.

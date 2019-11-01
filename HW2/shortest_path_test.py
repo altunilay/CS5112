@@ -24,11 +24,33 @@ except:
 try:
   print("Testing with edge list graph...")
   edge_graph = EdgeGraph()
-  edge_graph.add_edge('a', 'b', 1) 
+  edge_graph.add_edge('a', 'b', 1)
   if shortest_path(edge_graph, 'a', 'b') != (['a','b'], 1):
     print "Your code ran, but did NOT output the shortest distance from 'a' to 'b' when your edge list graph had the edge ('a', 'b', 1) added."
   else:
     print "Your code ran, and it correctly output the shortest distance from 'a' to 'b' when your edge list graph had the edge ('a', 'b', 1) added."
+except:
+  print "Your code produced this error when adding edge ('a', 'b', 1) to the edge list graph or getting the shortest path from 'a' to 'b'."
+  print sys.exc_info()[0]
+
+try:
+  print("Testing with edge list graph...")
+  edge_graph = EdgeGraph()
+  edge_graph.add_edge('h', 'a', 3)
+  edge_graph.add_edge('h', 'b', 2)
+  edge_graph.add_edge('h', 'c', 5)
+  edge_graph.add_edge('a', 'd', 3)
+  edge_graph.add_edge('b', 'd', 1)
+  edge_graph.add_edge('b', 'e', 6)
+  edge_graph.add_edge('c', 'e', 2)
+  edge_graph.add_edge('d', 'f', 4)
+  edge_graph.add_edge('e', 'f', 1)
+  edge_graph.add_edge('e', 'g', 4)
+  edge_graph.add_edge('f', 'g', 2) 
+  if shortest_path(edge_graph, 'h', 'e') != (['h','c','e'], 7):
+    print "Your code ran, but did NOT output the shortest distance from 'a' to 'b' when your edge list graph had the edge ('a', 'b', 1) added."
+  else:
+    print "Your code ran, and it correctly output the shortest distance from 'h' to 'e' when your edge list graph had the edge ('a', 'b', 1) added."
 except:
   print "Your code produced this error when adding edge ('a', 'b', 1) to the edge list graph or getting the shortest path from 'a' to 'b'."
   print sys.exc_info()[0]
