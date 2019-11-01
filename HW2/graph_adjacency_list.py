@@ -36,4 +36,7 @@ class Graph:
     # to `x`.
 
     # TODO: YOUR CODE HERE, delete the `raise NotImplementedError`line below once you finish writing your code
+    if node not in self.graph:
+      return []
+      
     return self.graph[node]
