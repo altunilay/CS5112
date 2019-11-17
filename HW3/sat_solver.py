@@ -16,7 +16,7 @@ def to_cnf_gadget(s):
         s = expr(s)
     step1 = parse_iff_implies(s)  # Steps 1
     step2 = deMorgansLaw(step1)  # Step 2
-    return distibutiveLaw(step2)  # Step 3
+    return distributiveLaw(step2)  # Step 3
 
 # ______________________________________________________________________________
 # STEP1: if s has IFF or IMPLIES, parse them
@@ -29,7 +29,30 @@ def to_cnf_gadget(s):
 # you may also use the is_symbol() helper function to determine if you have encountered a propositional symbol
 def parse_iff_implies(s):
     # TODO: write your code here, change the return values accordingly
-    return Expr(s.op, *args)
+    #Base case: expression is just a symbol, no operation
+    if is_symbol(s.op):
+        return s
+    #Apply law if operator is IFF
+    elif s.op == '<=>':
+        holder = dissociate(s.op, [s])
+        holder[0] = parse_iff_implies(holder[0])
+        holder[1] = parse_iff_implies(holder[1])
+        #Making them a and b so it's shorter and to avoid overlap with holders
+        a = associate('|', [~holder[0], holder[1]])
+        b = associate('|', [~holder[1], holder[0]])
+        return associate('&', [a,b])
+    #Also apply law if operator is IMPLIES
+    elif s.op == '==>':
+        holder = dissociate(s.op, [s])
+        holder[0] = ~parse_iff_implies(holder[0])
+        holder[1] = parse_iff_implies(holder[1])
+        return associate('|', holder)
+    #Any other operator returns itself with the method recursively applied to its arguments
+    else:
+        holder = dissociate(s.op, [s])
+        for each in holder:
+            each = parse_iff_implies(each)
+        return associate(s.op, holder) #Holder is already a list, thus doesn't need the brackets
 
 # ______________________________________________________________________________
 # STEP2: if there is NOT(~), move it inside, change the operations accordingly.
@@ -47,22 +70,71 @@ def parse_iff_implies(s):
 # you may also use the is_symbol() helper function to determine if you have encountered a propositional symbol
 def deMorgansLaw(s):
     # TODO: write your code here, change the return values accordingly
-    return Expr(s.op, *args)
+    #Base case: expression is just a symbol, no operation
+    if is_symbol(s.op):
+        return s
+    #If the lead operator is ~, time to check if you need to apply DeMorgan's Law!
+    elif s.op == '~':
+        sub = dissociate('~', [s])[0] #~ is a unary operator, so we know we only have one result
+        #Apply DeMorgan differently based on other operator
+        bus = dissociate(sub.op, [sub])
+        if sub.op == '~':
+            sub = bus[0]
+            return deMorgansLaw(sub)
+        elif sub.op == '|' and len(bus) == 2:  #Assuming (pretty sure) only 2 parts, will need to edit if not the case
+            bus[0] = deMorgansLaw(bus[0])
+            bus[1] = deMorgansLaw(bus[1])
+            return associate('&', [~bus[0], ~bus[1]])
+        elif sub.op == '&' and len(bus) == 2:
+            bus[0] = deMorgansLaw(bus[0])
+            bus[1] = deMorgansLaw(bus[1])
+            return associate('|', [~bus[0], ~bus[1]])
+        #In this case none apply, probably a symbol but call recursive just in case
+        else:
+            return deMorgansLaw(sub)
+    #Otherwise same as before, return itself with method recursively applied
+    else:
+        holder = dissociate(s.op, [s])
+        for each in holder:
+            each = deMorgansLaw(each)
+        return associate(s.op, holder)
+    #Expr(s.op, *args)
 
 # ______________________________________________________________________________
-# STEP3: use Distibutive Law to distribute and('&') over or('|')
+# STEP3: use Distributive Law to distribute and('&') over or('|')
 
 
 """ Example:
->>> distibutiveLaw((A & B) | C)
+>>> distributiveLaw((A & B) | C)
 ((A | C) & (B | C))
 """
 
-# TODO: apply distibutiveLaw so as to return an equivalent expression in CNF form
+# TODO: apply distributiveLaw so as to return an equivalent expression in CNF form
 # Hint: you may use the associate() helper function to help you flatten the expression
-def distibutiveLaw(s):
+def distributiveLaw(s):
     # TODO: write your code here, change the return values accordingly
-    return Expr(s.op, *args)
+    #Base case: expression is just a symbol, no operation
+    if is_symbol(s.op):
+        return s
+    #If starts with &, check if need to distribute
+    elif s.op == '&':
+        holder = dissociate('&', [s])
+        for each in holder:
+            #Apply distribution if fits
+            if each.op == '|':
+                rest = holder.remove(each)
+                each = associate('&', )
+            #In this case we don't distribute, do same as in other else statement
+            else:
+                each = distributiveLaw(each)
+        return associate('|', holder)
+    #If not check rest of expression recursively (same as the rest)
+    else:
+        holder = dissociate(s.op, [s])
+        for each in holder:
+            each = distributiveLaw(each)
+        return associate(s.op, holder)
+
 
 
 # ______________________________________________________________________________
