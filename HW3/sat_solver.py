@@ -29,30 +29,29 @@ def to_cnf_gadget(s):
 # you may also use the is_symbol() helper function to determine if you have encountered a propositional symbol
 def parse_iff_implies(s):
     # TODO: write your code here, change the return values accordingly
-    #Base case: expression is just a symbol, no operation
-    if is_symbol(s.op):
+    if (is_symbol(s.op)):
         return s
-    #Apply law if operator is IFF
-    elif s.op == '<=>':
-        holder = dissociate(s.op, [s])
-        holder[0] = parse_iff_implies(holder[0])
-        holder[1] = parse_iff_implies(holder[1])
-        #Making them a and b so it's shorter and to avoid overlap with holders
-        a = associate('|', [~holder[0], holder[1]])
-        b = associate('|', [~holder[1], holder[0]])
-        return associate('&', [a,b])
-    #Also apply law if operator is IMPLIES
+
+    transformed_args = []
+
+    for arg in s.args:
+        transformed_args.append(parse_iff_implies(arg))
+    
+    if s.op == '<=>':
+        left = Expr("==>",transformed_args[0],transformed_args[1])
+        right = Expr("==>",transformed_args[1],transformed_args[0])
+        final = Expr("&",left,right)
+
+        return parse_iff_implies(final)
+
     elif s.op == '==>':
-        holder = dissociate(s.op, [s])
-        holder[0] = ~parse_iff_implies(holder[0])
-        holder[1] = parse_iff_implies(holder[1])
-        return associate('|', holder)
-    #Any other operator returns itself with the method recursively applied to its arguments
-    else:
-        holder = dissociate(s.op, [s])
-        for each in holder:
-            each = parse_iff_implies(each)
-        return associate(s.op, holder) #Holder is already a list, thus doesn't need the brackets
+        not_op = Expr('~', transformed_args[0]) 
+        or_op = Expr("|", not_op,transformed_args[1])
+
+        return or_op
+
+    return Expr(s.op, *transformed_args)
+
 
 # ______________________________________________________________________________
 # STEP2: if there is NOT(~), move it inside, change the operations accordingly.
