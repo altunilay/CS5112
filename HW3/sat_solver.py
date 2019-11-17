@@ -29,7 +29,28 @@ def to_cnf_gadget(s):
 # you may also use the is_symbol() helper function to determine if you have encountered a propositional symbol
 def parse_iff_implies(s):
     # TODO: write your code here, change the return values accordingly
-    return Expr(s.op, *args)
+    if (is_symbol(s.op)):
+        return s
+
+    transformed_args = []
+
+    for arg in s.args:
+        transformed_args.append(parse_iff_implies(arg))
+    
+    if s.op == '<=>':
+        left = Expr("==>",transformed_args[0],transformed_args[1])
+        right = Expr("==>",transformed_args[1],transformed_args[0])
+        final = Expr("&",left,right)
+
+        return parse_iff_implies(final)
+
+    elif s.op == '==>':
+        not_op = Expr('~', transformed_args[0]) 
+        or_op = Expr("|", not_op,transformed_args[1])
+
+        return or_op
+
+    return Expr(s.op, *transformed_args)
 
 # ______________________________________________________________________________
 # STEP2: if there is NOT(~), move it inside, change the operations accordingly.
