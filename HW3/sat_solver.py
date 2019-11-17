@@ -1,5 +1,5 @@
-# TODO: Your name, Cornell NetID
-# TODO: Your Partner's name, Cornell NetID
+# TODO: Nilay Altun, na523
+# TODO: Kelly Mayhew, khm53
 
 from helpers import *
 from cnf_sat_solver import dpll
@@ -90,12 +90,13 @@ def deMorgansLaw(s):
             return associate('|', [~bus[0], ~bus[1]])
         #In this case none apply, probably a symbol but call recursive just in case
         else:
-            return deMorgansLaw(sub)
+            blah = deMorgansLaw(sub)
+            return ~blah
     #Otherwise same as before, return itself with method recursively applied
     else:
         holder = dissociate(s.op, [s])
-        for each in holder:
-            each = deMorgansLaw(each)
+        for i, each in enumerate(holder):
+            holder[i] = deMorgansLaw(each)
         return associate(s.op, holder)
     #Expr(s.op, *args)
 
@@ -115,23 +116,43 @@ def distributiveLaw(s):
     #Base case: expression is just a symbol, no operation
     if is_symbol(s.op):
         return s
-    #If starts with &, check if need to distribute
-    elif s.op == '&':
-        holder = dissociate('&', [s])
-        for each in holder:
+    #If starts with |, check if need to distribute (CNF is a bunch of ANDs of ORs, want ORs on inside)
+    elif s.op == '|':
+        holder = dissociate('|', [s])
+        distribs = list()
+        for i, each in enumerate(holder):
             #Apply distribution if fits
-            if each.op == '|':
-                rest = holder.remove(each)
-                each = associate('&', )
+            if each.op == '&':
+                distribs.append(each)
+                holder.remove(each)
             #In this case we don't distribute, do same as in other else statement
             else:
-                each = distributiveLaw(each)
-        return associate('|', holder)
+                holder[i] = distributiveLaw(each)
+        #At this point have two groups:
+                #holder has what should be distributed
+                #distribs has what should be distributed INTO
+        #If distribs empty don't bother
+        if len(distribs) == 0:
+            return associate('|', holder)
+        #Otherwise need to distribute
+        for i, each in enumerate(distribs):
+            sub = dissociate('&', [each])
+            for j, one in enumerate(sub):
+                rest = holder.copy()
+                rest.append(one)
+                sub[j] = associate('|', rest)
+            distribs[i] = associate('&', sub)
+        return associate('|', distribs)
     #If not check rest of expression recursively (same as the rest)
+    #Have to make special case for ~ since it doesn't work with associate
+    elif s.op == '~':
+        blah = dissociate('~', [s])[0]
+        blah = distributiveLaw(blah)
+        return ~blah
     else:
         holder = dissociate(s.op, [s])
-        for each in holder:
-            each = distributiveLaw(each)
+        for i, each in enumerate(holder):
+            holder[i] = distributiveLaw(each)
         return associate(s.op, holder)
 
 
