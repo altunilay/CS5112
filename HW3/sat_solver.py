@@ -81,13 +81,13 @@ def deMorgansLaw(s):
             sub = bus[0]
             return deMorgansLaw(sub)
         elif sub.op == '|' and len(bus) == 2:  #Assuming (pretty sure) only 2 parts, will need to edit if not the case
-            bus[0] = deMorgansLaw(bus[0])
-            bus[1] = deMorgansLaw(bus[1])
-            return associate('&', [~bus[0], ~bus[1]])
+            bus[0] = deMorgansLaw(~bus[0])
+            bus[1] = deMorgansLaw(~bus[1])
+            return associate('&', [bus[0], bus[1]])
         elif sub.op == '&' and len(bus) == 2:
-            bus[0] = deMorgansLaw(bus[0])
-            bus[1] = deMorgansLaw(bus[1])
-            return associate('|', [~bus[0], ~bus[1]])
+            bus[0] = deMorgansLaw(~bus[0])
+            bus[1] = deMorgansLaw(~bus[1])
+            return associate('|', [bus[0], bus[1]])
         #In this case none apply, probably a symbol but call recursive just in case
         else:
             blah = deMorgansLaw(sub)
