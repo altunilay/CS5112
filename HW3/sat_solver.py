@@ -16,8 +16,8 @@ def to_cnf_gadget(s):
         s = expr(s)
     step1 = parse_iff_implies(s)  # Steps 1
     step2 = deMorgansLaw(step1)  # Step 2
-    print (distributiveLaw(step2))
-    return distributiveLaw(step2)  # Step 3
+    print (distibutiveLaw(step2))
+    return distibutiveLaw(step2)  # Step 3
 
 # ______________________________________________________________________________
 # STEP1: if s has IFF or IMPLIES, parse them
@@ -106,17 +106,17 @@ def deMorgansLaw(s):
     #Expr(s.op, *args)
 
 # ______________________________________________________________________________
-# STEP3: use Distributive Law to distribute and('&') over or('|')
+# STEP3: use distibutive Law to distribute and('&') over or('|')
 
 
 """ Example:
->>> distributiveLaw((A & B) | C)
+>>> distibutiveLaw((A & B) | C)
 ((A | C) & (B | C))
 """
 
-# TODO: apply distributiveLaw so as to return an equivalent expression in CNF form
+# TODO: apply distibutiveLaw so as to return an equivalent expression in CNF form
 # Hint: you may use the associate() helper function to help you flatten the expression
-def distributiveLaw(s):
+def distibutiveLaw(s):
     # TODO: write your code here, change the return values accordingly
     #Base case: expression is just a symbol, no operation
     if is_symbol(s.op):
@@ -132,7 +132,7 @@ def distributiveLaw(s):
                 holder.remove(each)
             #In this case we don't distribute, do same as in other else statement
             else:
-                holder[i] = distributiveLaw(each)
+                holder[i] = distibutiveLaw(each)
         #At this point have two groups:
                 #holder has what should be distributed
                 #distribs has what should be distributed INTO
@@ -152,12 +152,12 @@ def distributiveLaw(s):
     #Have to make special case for ~ since it doesn't work with associate
     elif s.op == '~':
         blah = dissociate('~', [s])[0]
-        blah = distributiveLaw(blah)
+        blah = distibutiveLaw(blah)
         return ~blah
     else:
         holder = dissociate(s.op, [s])
         for i, each in enumerate(holder):
-            holder[i] = distributiveLaw(each)
+            holder[i] = distibutiveLaw(each)
         return associate(s.op, holder)
 
 
