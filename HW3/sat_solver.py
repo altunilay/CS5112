@@ -83,8 +83,7 @@ def deMorgansLaw(s):
         sub = dissociate('~', [s])[0] #~ is a unary operator, so we know we only have one result
         #Apply DeMorgan differently based on other operator
         bus = dissociate(sub.op, [sub])
-        if sub.op == '~':
-            sub = bus[0]
+        if s.args[0].op == '~': #Checking via dissociate doesn't work for ~~P
             return deMorgansLaw(sub)
         elif sub.op == '|' and len(bus) == 2:  #Assuming (pretty sure) only 2 parts, will need to edit if not the case
             bus[0] = deMorgansLaw(~bus[0])
