@@ -16,6 +16,7 @@ def to_cnf_gadget(s):
         s = expr(s)
     step1 = parse_iff_implies(s)  # Steps 1
     step2 = deMorgansLaw(step1)  # Step 2
+    print (distributiveLaw(step2))
     return distributiveLaw(step2)  # Step 3
 
 # ______________________________________________________________________________
@@ -29,19 +30,24 @@ def to_cnf_gadget(s):
 # you may also use the is_symbol() helper function to determine if you have encountered a propositional symbol
 def parse_iff_implies(s):
     # TODO: write your code here, change the return values accordingly
-    if (is_symbol(s.op)):
+    # first check the "s" has operation or not
+    if is_symbol(s.op):
         return s
 
+    # list to keep the track of all the args in s
     transformed_args = []
 
+    # for each arg in s, recursively call the function to get the bottom of it
     for arg in s.args:
         transformed_args.append(parse_iff_implies(arg))
-    
+
+    # after we came to the first expression, check if it contains iff and implies
     if s.op == '<=>':
         left = Expr("==>",transformed_args[0],transformed_args[1])
         right = Expr("==>",transformed_args[1],transformed_args[0])
         final = Expr("&",left,right)
 
+        # if it contains implies we need to call the function again because implies logic is turned to iff after this
         return parse_iff_implies(final)
 
     elif s.op == '==>':
