@@ -16,7 +16,6 @@ def to_cnf_gadget(s):
         s = expr(s)
     step1 = parse_iff_implies(s)  # Steps 1
     step2 = deMorgansLaw(step1)  # Step 2
-    print (distibutiveLaw(step2))
     return distibutiveLaw(step2)  # Step 3
 
 # ______________________________________________________________________________
